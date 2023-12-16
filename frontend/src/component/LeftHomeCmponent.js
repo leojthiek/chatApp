@@ -9,12 +9,21 @@ import { FaArrowLeft } from "react-icons/fa6"
 import AllUserComponent from "./AllUserComponent"
 import AllFriendComponent from "./AllFriendsComponent"
 import AllFriendRequestComponent from "./AllFriendRequestComponent"
+import { useDispatch, useSelector } from "react-redux"
+import { logout } from "../redux/features/loginSlice"
 
-export default function LeftHomeCmponent({menuListVisible,setMenuListVisible}) {
+export default function LeftHomeCmponent({
+  menuListVisible,
+  setMenuListVisible,
+  setUserMessageVisible,
+  setFriendId,
+}) {
   const [isAllUservisible, setIsAllUserVisible] = React.useState(false)
   const [homeVisiblity, setHomeVisibility] = React.useState(true)
   const [allFriendvisible, setAllFriendVisible] = React.useState(false)
   const [friendRequestVisible, setFriendRequestVisible] = React.useState(false)
+
+  const dispatch = useDispatch()
 
   const handleHomeIcon = () => {
     setHomeVisibility(true)
@@ -24,13 +33,14 @@ export default function LeftHomeCmponent({menuListVisible,setMenuListVisible}) {
   }
 
   const handleAllUserVisibility = () => {
+    console.log("handleAllUserVisibility called")
     setIsAllUserVisible(true)
     setHomeVisibility(false)
     setAllFriendVisible(false)
     setFriendRequestVisible(false)
   }
 
-  const handleAllFriedsVisible = () => {
+  const handleAllFriendsVisible = () => {
     setAllFriendVisible(true)
     setHomeVisibility(false)
     setIsAllUserVisible(false)
@@ -48,13 +58,19 @@ export default function LeftHomeCmponent({menuListVisible,setMenuListVisible}) {
     setMenuListVisible(!menuListVisible)
   }
 
+  const handleLogOut = () => {
+    dispatch(logout())
+  }
+
+  const loginUser = useSelector((state) => state.loginUser)
+  const { user } = loginUser
 
   return (
     <>
       <div className=' flex justify-between items-center md:h-16 h-12 bg-gray-200 pl-4 pr-4'>
         <div className='md:w-12 md:h-12 w-9 h-9'>
           <img
-            src='manager.jpg'
+            src={user?.image}
             alt='profile'
             className='w-full h-full rounded-full object-cover'
           />
@@ -73,18 +89,27 @@ export default function LeftHomeCmponent({menuListVisible,setMenuListVisible}) {
             className=' md:text-2xl text-xl cursor-pointer'
           />
           <LuMessageSquarePlus
-            onClick={handleAllFriedsVisible}
+            onClick={handleAllFriendsVisible}
             className=' md:text-2xl text-xl cursor-pointer'
           />
-          <CiMenuKebab onClick={handleOpenMenu} className=' md:text-2xl text-xl cursor-pointer' />
+          <CiMenuKebab
+            onClick={handleOpenMenu}
+            className=' md:text-2xl text-xl cursor-pointer'
+          />
           {menuListVisible && (
-            <div className="absolute top-full left-0 w-56 bg-white mt-3 pt-2 pb-4 rounded shadow z-10">
-              <h3 className=" cursor-pointer h-10 hover:bg-gray-200 flex items-center pl-3">Profile</h3>
-              <h3 className=" cursor-pointer h-10 hover:bg-gray-200 flex items-center pl-3">Logout</h3>
+            <div className='absolute top-full left-0 w-56 bg-white mt-3 pt-2 pb-4 rounded shadow z-10'>
+              <h3 className=' cursor-pointer h-10 hover:bg-gray-200 flex items-center pl-3'>
+                Profile
+              </h3>
+              <h3
+                className=' cursor-pointer h-10 hover:bg-gray-200 flex items-center pl-3'
+                onClick={handleLogOut}
+              >
+                Logout
+              </h3>
             </div>
           )}
         </div>
-       
       </div>
 
       <div className='relative flex justify-center pt-2'>
@@ -119,9 +144,16 @@ export default function LeftHomeCmponent({menuListVisible,setMenuListVisible}) {
         </div>
       )}
       <div>{isAllUservisible && <AllUserComponent />}</div>
-      <div>{allFriendvisible && <AllFriendComponent />}</div>
+      <div>
+        {allFriendvisible && (
+          <AllFriendComponent
+            handleAllUserVisibility={handleAllUserVisibility}
+            setUserMessageVisible={setUserMessageVisible}
+            setFriendId={setFriendId}
+          />
+        )}
+      </div>
       <div>{friendRequestVisible && <AllFriendRequestComponent />}</div>
-      
     </>
   )
 }
