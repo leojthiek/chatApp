@@ -33,4 +33,4 @@ jobs:
     - run: cd ..
     - run: npm install
     - run: | 
-          echo "${{secrets.CHATAPP}}" > .env
+          echo "${{secrets.CHATAPP}}" > /backend/.env
