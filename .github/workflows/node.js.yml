@@ -27,10 +27,11 @@ jobs:
         node-version: ${{ matrix.node-version }}
         cache: 'npm'
     - run: cd frontend
-    - run: npm run build --if-present
+    - run: npm run build
     - run: npm install
     
     - run: cd ..
     - run: npm install
     - run: | 
           echo "${{secrets.CHATAPP}}" > backend/.env
+    - run: pm2 restart index      
