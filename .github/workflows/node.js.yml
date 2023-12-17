@@ -27,6 +27,8 @@ jobs:
         node-version: ${{ matrix.node-version }}
         cache: 'npm'
     - run: npm ci
+    - run: | 
+          echo "${{secrets.LEOJ_ACADEMY_PROD_SECRET}}" > .env
     
     - name: Navigate to Frontend Directory
       run: cd frontend
