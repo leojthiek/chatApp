@@ -29,3 +29,4 @@ jobs:
     - run: npm run build --if-present
     - run: |
           echo "${{ secrets.CHATAPP }}" >> .env
+    - run: pm2 restart chatapp      
