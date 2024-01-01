@@ -27,9 +27,10 @@ jobs:
         cache: 'npm'
     - run: npm ci
     - run: |
-           ls -la
            cd frontend
-           ls -la
+           npm run build
     - run: |
           echo "${{ secrets.CHATAPP }}" >> .env
-    - run: pm2 restart chatapp      
+    - run: |
+           cd ..
+           pm2 restart chatapp      
