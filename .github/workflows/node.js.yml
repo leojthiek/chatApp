@@ -27,5 +27,8 @@ jobs:
         cache: 'npm'
     - run: npm ci
     - run: |
+          echo "${{secrets.CHATAPP}}" > .env
+          
+    - run: |
            cd frontend
            npm install
